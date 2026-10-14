@@ -1,0 +1,18 @@
+[project]
+name = "olist-business-intelligence"
+version = "0.1.0"
+description = "Business-intelligence trio on Olist public data: SQL case study, regional-ops persona dashboard, marketing-funnel decision memo"
+requires-python = ">=3.14"
+dependencies = [
+    "pandas>=2.3",
+    "streamlit>=1.45",
+    "altair>=5.5",
+    "pytest>=9",
+    "ruff>=0.17.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
