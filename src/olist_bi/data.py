@@ -61,7 +61,9 @@ def clean() -> None:
                 parsed = pd.to_datetime(df[col], format="mixed", errors="coerce")
                 bad = parsed.isna() & (df[col] != "")
                 if bad.any():
-                    raise ValueError(f"unparseable date in {name}/{col}: {df.loc[bad, col].iloc[0]}")
+                    raise ValueError(
+                        f"unparseable date in {name}/{col}: {df.loc[bad, col].iloc[0]}"
+                    )
                 df[col] = parsed.dt.strftime("%Y-%m-%d %H:%M:%S").where(parsed.notna(), "")
         df.to_csv(clean_dir / name, index=False)
         print(f"wrote cleaned {name} ({len(df)} rows)")

@@ -66,7 +66,9 @@ def test_q5_repeat_rate_uses_real_person_ids():
     """customer_id is an alias per order; repeat analysis must use customer_unique_id."""
     con = sqlite3.connect(DB)
     q5 = read_csv(RESULTS / "q5_cohort_repeat_rate.csv")
-    delivered = read_sql("SELECT customer_id FROM orders WHERE order_delivered_customer_date != ''", con)
+    delivered = read_sql(
+        "SELECT customer_id FROM orders WHERE order_delivered_customer_date != ''", con
+    )
     people = read_sql("SELECT customer_id, customer_unique_id FROM customers", con)
     persons_with_delivery = people.merge(delivered, on="customer_id").customer_unique_id.nunique()
     assert q5.new_customers.sum() == persons_with_delivery
@@ -80,9 +82,11 @@ def test_funnel_baseline_matches_join(con):
     deals = read_sql("SELECT * FROM closed_deals", con)
     tbl = segment_table(leads, deals, "origin")
     total = int(tbl.converted.sum())
-    joined = int(read_sql(
-        "SELECT COUNT() FROM closed_deals AS d JOIN mql AS m ON m.mql_id = d.mql_id", con
-    ).iloc[0, 0])
+    joined = int(
+        read_sql(
+            "SELECT COUNT() FROM closed_deals AS d JOIN mql AS m ON m.mql_id = d.mql_id", con
+        ).iloc[0, 0]
+    )
     assert total == joined == 842
     assert tbl.n.sum() == 8000
     # significance sanity: PAID_SEARCH ci_low must be above baseline (the memo's claim)

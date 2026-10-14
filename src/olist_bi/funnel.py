@@ -25,7 +25,9 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
     return (max(0.0, centre - half), min(1.0, centre + half))
 
 
-def n_needed_for_mde(p_base: float, rel_uplift: float, alpha: float = 0.05, power: float = 0.8) -> int:
+def n_needed_for_mde(
+    p_base: float, rel_uplift: float, alpha: float = 0.05, power: float = 0.8
+) -> int:
     """Sample size to detect a relative uplift over p_base with two-sided z-tests.
 
     Standard normal-power formula: n = ((z_a + z_b)^2 * p(1-p)) / delta^2 with
@@ -49,7 +51,9 @@ def segment_table(leads: DataFrame, deals: DataFrame, key: str) -> DataFrame:
         n = len(sub)
         k = int(sub["converted"].sum())
         lo, hi = wilson(k, n)
-        rows.append({"segment": name, "n": n, "converted": k, "rate": k / n, "ci_low": lo, "ci_high": hi})
+        rows.append(
+            {"segment": name, "n": n, "converted": k, "rate": k / n, "ci_low": lo, "ci_high": hi}
+        )
     out = DataFrame(rows).sort_values("n", ascending=False)
     total_n, total_k = len(leads), int(out["converted"].sum())
     baseline = total_k / total_n

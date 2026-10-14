@@ -23,16 +23,27 @@ ACCENT = "#c2410c"
 
 st.set_page_config(page_title="Olist regional ops dashboard", layout="wide")
 st.title("Olist — regional operations dashboard")
-st.caption(f"Persona: regional operations manager · Olist public data, Sep 2016 – Sep 2018 · opened {date.today()}")
+st.caption(
+    f"Persona: regional operations manager · Olist public data, Sep 2016 – Sep 2018 · opened {date.today()}"
+)
 
 con = sqlite3.connect(DB)
-states = [r[0] for r in con.execute("SELECT DISTINCT customer_state FROM customers ORDER BY customer_state")]
-months = [r[0] for r in con.execute(
-    "SELECT DISTINCT substr(order_purchase_timestamp,1,7) FROM orders WHERE order_delivered_customer_date != '' ORDER BY 1")]
+states = [
+    r[0]
+    for r in con.execute("SELECT DISTINCT customer_state FROM customers ORDER BY customer_state")
+]
+months = [
+    r[0]
+    for r in con.execute(
+        "SELECT DISTINCT substr(order_purchase_timestamp,1,7) FROM orders WHERE order_delivered_customer_date != '' ORDER BY 1"
+    )
+]
 
 with st.sidebar:
     st.header("Filters")
-    state = st.selectbox("Destination state", states, index=(states.index("DF") if "DF" in states else 0))
+    state = st.selectbox(
+        "Destination state", states, index=(states.index("DF") if "DF" in states else 0)
+    )
     start = st.selectbox("From month", months, index=0)
     end = st.selectbox("To month", months[-1])
 month_in = ",".join(f"'{m}'" for m in months if start <= m <= end)
@@ -118,7 +129,8 @@ cats = read_sql(
 st.subheader("Top categories by revenue")
 st.altair_chart(
     alt.Chart(cats).mark_bar(color=ACCENT).encode(x="revenue:Q", y="category:N")
-    + alt.Chart(cats).mark_text(align="left", baseline="middle", dx=4)
+    + alt.Chart(cats)
+    .mark_text(align="left", baseline="middle", dx=4)
     .encode(text="revenue:N", x="revenue:Q", y="category:N"),
     width="stretch",
 )

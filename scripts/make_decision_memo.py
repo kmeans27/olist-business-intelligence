@@ -31,4 +31,6 @@ seg_deals = deals.groupby("business_segment").size().sort_values(ascending=False
 seg_deals.to_csv(OUT / "won_deal_segments.csv")
 print("== won-deal business segments")
 print(seg_deals.to_string())
-print(f"\ntotal leads: {len(leads)}, closed deals matched: {int((leads['mql_id'].isin(set(deals['mql_id']))).sum())}")
+print(
+    f"\ntotal leads: {len(leads)}, closed deals matched: {int((leads['mql_id'].isin(set(deals['mql_id']))).sum())}"
+)
